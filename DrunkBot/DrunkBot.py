@@ -7,21 +7,21 @@ import platform
 import datetime
 from datetime import timedelta
 import random
+from time import gmtime, strftime
+
 
 #Set prefix character
 prefix = "."
 
-TargetDate = 0
-TargetDate = datetime.datetime.now() + timedelta(seconds=30)
-randomSeconds = 0
-
-#Other vars
-wordin = ""
-listOfWords = ""
 
 #Def log method
 def log(Message):
     print(str(datetime.datetime.now())+ '   ' + str(Message))
+
+global TargetDate 
+TargetDate = datetime.datetime.now() + timedelta(seconds=20)
+log("Target Date set as: " + str(TargetDate))
+randomSeconds = 0
 
 #Def Method to read token from the file
 def getToken():
@@ -65,6 +65,10 @@ def getRandomRespose():
     
     return responseList[random.randint(0,len(reponseList))]
 
+#Random response
+#async def on_socket_raw_send():
+    
+
 #Commands
 @client.event
 async def on_message(message):
@@ -88,19 +92,18 @@ async def on_message(message):
         elif(message.content == (prefix + "ping")):
             await client.send_message(client.get_channel(message.channel.id), "Uuurp Pong!")
 
-    elif(TargetDate == datetime.datetime.now()):
+    else:
+        pass
+
+    if(TargetDate > datetime.datetime.now()):
         log("Random response date reached")
         #Get random response
-        await client.send_message(client.get_channel(getChannel()), getRandomRespose())
+        await client.send_message(client.get_channel(message.channel.id), getRandomRespose())
 
         #Get next date
         randomSeconds = random.randint(60,3600)
-        TargetDate = TargetDate + timedelta(seconds=randomSeconds)
+        TargetDate = datetime.datetime.now() + timedelta(seconds=randomSeconds)
         log("Target date set as" + str(TargetDate))
-
-    else:
-        pass
-    
 
 #Run bot
 client.run(str(getToken()))
