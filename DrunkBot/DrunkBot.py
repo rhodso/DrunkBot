@@ -7,24 +7,20 @@ import platform
 import datetime
 from datetime import timedelta
 import random
-from time import gmtime, strftime
+import praw
 
+#Reddit variables
+CLID = "IGAjcEE-70TWfw"
+SECT = "zu64wRhKJHCoGHX0HDLh2L34Idk"
+AGNT = "ChatBot"
+reddit = praw.Reddit(client_id=CLID, client_secret=SECT, user_agent=AGNT)
 
 #Set prefix character
 prefix = "."
 
-
 #Def log method
 def log(Message):
     print(str(datetime.datetime.now())+ '   ' + str(Message))
-
-TargetDate = datetime.datetime.now()
-TargetDate = TargetDate + timedelta(seconds=20)
-log("Target Date set as: " + str(TargetDate))
-randomSeconds = 0
-
-def getTargetDate():
-    return TargetDate
 
 #Def Method to read token from the file
 def getToken():
@@ -45,42 +41,36 @@ async def on_ready():
     log('Ready!')
     return await client.change_presence(game=discord.Game(name='a drinking game')) 
 
-#Get random channel
-def getRandomChannel():
-        textChannelList = []
-        for server in Client.servers:
-            for channel in server.channels:
-                if channel.type == 'Text':
-                    textChannelList.append(channel.id)
-
-        #return textChannelList[random.randint(0,len(textChannelList))]
-        return 334694739020611586 #admin channel on my private server
-
 #Get random reponse
 def getRandomRespose():
     responseList = [
         "Ooer",
         "*Hick*",
         "Unreal",
-        "Y-y-y'know something. I-I bet crabs think *uuurp* I bet crabs think that fish can fly"
-
+        "Y-y-y'know something. I-I bet crabs think *uuurp* I bet crabs think that fish can fly",
+        "You sure do got a- *hick* a-a-a purdy mouf",
+        "Look at mah truck nuts!",
+        "I don't fuck mah seester, I make love to 'er",
+        "No, Officer... I *uurp* I-I swear to drunk I'm not god",
+        "That ain't beer, that's piss!",
+        "PARTY FOUL!",
+        "I ytprd it with my nose and 6th to get a free lift to the station at least a bit of the moon through a telescope using it you finish at I don't understand and then replace them when I have the money from work and uni so won't be home until like it's",
+        "@ZombieBroth made me, officer",
+        "I threw up on my socks.... happy *hick* new year",
+        "zzzzzzzzzzzzzzzzzzzzzoooooooooooooooooombie why unot oline hw==whe i neeed oyu",
+        "I would call heavan and tell them they're missing an ange- *hick* -angel. But I'm kinda hoping you're a slut",
+        "Did you sit in some sugar? Cause you have a *uurp* a sweet looking ass",
+        "Girl you should sell hot dogs! You already know how to make a weiner *uurp stand",
+        "You remind me of my big toe. I'm going to bang you on every piece of furniture in my house",
+        "How about you come over here and sit on my lap. We'll talk about the first thing that pops up",
+        "Did you just fart? Because you blew me away"
         ]
     
     return random.choice(responseList)
 
-def willBotReply(target, current):
-    if(target < current):
-        return True
-    else:
-        return False
-
-#Random response
-#async def on_socket_raw_send():
-
 #Commands
 @client.event
 async def on_message(message):
-    TargetDate = getTargetDate()
     if(message.content[:1] == prefix):
         #If message starts with the prefix, it's a command. Handle it as such
 
@@ -98,12 +88,23 @@ async def on_message(message):
         elif(message.content == (prefix + "ping")):
             await client.send_message(client.get_channel(message.channel.id), "Uuurp Pong!")
 
+        elif(message.content == (prefix + "shouldIDrink?")):
+            await client.send_message(client.get_channel(message.channel.id), "Yes")
+
+        elif(message.content == (prefix + "iHaveAnIdea")):
+            log("Running iHaveAnIdea command")
+            submission = reddit.subreddit('crazyideas').random()
+            await client.send_message(client.get_channel(message.channel.id), "Yo guys, I got an idea!")
+            await client.send_message(client.get_channel(message.channel.id), submission.title)
+            await client.send_message(client.get_channel(message.channel.id), submission.selftext)
+
     elif(random.randint(1,10) == 5):
-        if(message.author != "ChatBot"):    
+        if(message.author != "DrunkBot"):    
             log("Message will be replied to")
-            await client.send_message(client.get_channel(message.channel.id), getRandomRespose())
+            await client.send_message(client.get_channel(message.channel.id), getRandomRespose() + ", " + message.author.mention)
     else:
         pass
 
 #Run bot
+#client.loop.create_task(background_loop())
 client.run(str(getToken()))
