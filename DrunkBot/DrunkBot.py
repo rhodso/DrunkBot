@@ -95,25 +95,13 @@ async def on_message(message):
             log("Running help command...")
             await client.send_message(client.get_channel(message.channel.id), "Uuurp")
 
-        elif(message.content == (prefix + "getChannelID")):
-            await client.send_message(client.get_channel(message.channel.id), str(message.channel.id))
-
         elif(message.content == (prefix + "ping")):
             await client.send_message(client.get_channel(message.channel.id), "Uuurp Pong!")
 
-    elif(message.author != "DrunkBot" and willBotReply(TargetDate, datetime.datetime.now())):
-        log("Random response date reached")
-        
-        #Get next date
-        randomSeconds = random.randint(60,3600)
-        randomMins = randomSeconds//60
-        randomSeconds = randomSeconds - (randomMins*60)
-        TargetDate = datetime.datetime.now() + timedelta(seconds=randomSeconds, minutes=randomMins)
-        log("Target date set as " + str(TargetDate))
-        
-        #Get random response
-        await client.send_message(client.get_channel(message.channel.id), getRandomRespose())
-
+    elif(random.randint(1,10) == 5):
+        if(message.author != "ChatBot"):    
+            log("Message will be replied to")
+            await client.send_message(client.get_channel(message.channel.id), getRandomRespose())
     else:
         pass
 
