@@ -18,10 +18,13 @@ prefix = "."
 def log(Message):
     print(str(datetime.datetime.now())+ '   ' + str(Message))
 
-global TargetDate 
-TargetDate = datetime.datetime.now() + timedelta(seconds=20)
+TargetDate = datetime.datetime.now()
+TargetDate = TargetDate + timedelta(seconds=20)
 log("Target Date set as: " + str(TargetDate))
 randomSeconds = 0
+
+def getTargetDate():
+    return TargetDate
 
 #Def Method to read token from the file
 def getToken():
@@ -55,23 +58,29 @@ def getRandomChannel():
 
 #Get random reponse
 def getRandomRespose():
-    responseList = {
+    responseList = [
         "Ooer",
         "*Hick*",
         "Unreal",
         "Y-y-y'know something. I-I bet crabs think *uuurp* I bet crabs think that fish can fly"
 
-        }
+        ]
     
-    return responseList[random.randint(0,len(reponseList))]
+    return random.choice(responseList)
+
+def willBotReply(target, current):
+    if(target < current):
+        return True
+    else:
+        return False
 
 #Random response
 #async def on_socket_raw_send():
-    
 
 #Commands
 @client.event
 async def on_message(message):
+    TargetDate = getTargetDate()
     if(message.content[:1] == prefix):
         #If message starts with the prefix, it's a command. Handle it as such
 
@@ -92,18 +101,21 @@ async def on_message(message):
         elif(message.content == (prefix + "ping")):
             await client.send_message(client.get_channel(message.channel.id), "Uuurp Pong!")
 
-    else:
-        pass
-
-    if(TargetDate > datetime.datetime.now()):
+    elif(message.author != "DrunkBot" and willBotReply(TargetDate, datetime.datetime.now())):
         log("Random response date reached")
+        
+        #Get next date
+        randomSeconds = random.randint(60,3600)
+        randomMins = randomSeconds//60
+        randomSeconds = randomSeconds - (randomMins*60)
+        TargetDate = datetime.datetime.now() + timedelta(seconds=randomSeconds, minutes=randomMins)
+        log("Target date set as " + str(TargetDate))
+        
         #Get random response
         await client.send_message(client.get_channel(message.channel.id), getRandomRespose())
 
-        #Get next date
-        randomSeconds = random.randint(60,3600)
-        TargetDate = datetime.datetime.now() + timedelta(seconds=randomSeconds)
-        log("Target date set as" + str(TargetDate))
+    else:
+        pass
 
 #Run bot
 client.run(str(getToken()))
