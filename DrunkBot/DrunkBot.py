@@ -43,29 +43,15 @@ async def on_ready():
 
 #Get random reponse
 def getRandomRespose():
-    responseList = [
-        "Ooer",
-        "*Hick*",
-        "Unreal",
-        "Y-y-y'know something. I-I bet crabs think *uuurp* I bet crabs think that fish can fly",
-        "You sure do got a- *hick* a-a-a purdy mouf",
-        "Look at mah truck nuts!",
-        "I don't fuck mah seester, I make love to 'er",
-        "No, Officer... I *uurp* I-I swear to drunk I'm not god",
-        "That ain't beer, that's piss!",
-        "PARTY FOUL!",
-        "I ytprd it with my nose and 6th to get a free lift to the station at least a bit of the moon through a telescope using it you finish at I don't understand and then replace them when I have the money from work and uni so won't be home until like it's",
-        "@ZombieBroth made me, officer",
-        "I threw up on my socks.... happy *hick* new year",
-        "zzzzzzzzzzzzzzzzzzzzzoooooooooooooooooombie why unot oline hw==whe i neeed oyu",
-        "I would call heavan and tell them they're missing an ange- *hick* -angel. But I'm kinda hoping you're a slut",
-        "Did you sit in some sugar? Cause you have a *uurp* a sweet looking ass",
-        "Girl you should sell hot dogs! You already know how to make a weiner *uurp stand",
-        "You remind me of my big toe. I'm going to bang you on every piece of furniture in my house",
-        "How about you come over here and sit on my lap. We'll talk about the first thing that pops up",
-        "Did you just fart? Because you blew me away"
-        ]
+    #Create array
+    responseList = []
     
+    #Read them all into an array
+    file = open('responselist.txt', 'r')
+    for line in file:
+        reponselist.append(line)
+    
+    #Return one at random
     return random.choice(responseList)
 
 #Commands
