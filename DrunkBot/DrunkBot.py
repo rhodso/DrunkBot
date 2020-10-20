@@ -79,29 +79,29 @@ async def on_message(message):
         #   log("Running [Command name] command...")
         #   Do stuff
         #   End with:
-        #   await client.send_message(client.get_channel(message.channel.id), [Message (result of command)])
+        #   await message.channel.send( [Message (result of command)])
         
         if(message.content == (prefix + "help")):
             log("Running help command...")
-            await client.send_message(client.get_channel(message.channel.id), "Uuurp")
+            await message.channel.send( "Uuurp")
 
         elif(message.content == (prefix + "ping")):
-            await client.send_message(client.get_channel(message.channel.id), "Uuurp Pong!")
+            await message.channel.send( "Uuurp Pong!")
 
         elif(message.content == (prefix + "shouldIDrink?")):
-            await client.send_message(client.get_channel(message.channel.id), "Yes")
+            await message.channel.send( "Yes")
 
         elif(message.content == (prefix + "iHaveAnIdea")):
             log("Running iHaveAnIdea command")
             submission = reddit.subreddit('crazyideas').random()
-            await client.send_message(client.get_channel(message.channel.id), "Yo guys, I got an idea!")
-            await client.send_message(client.get_channel(message.channel.id), submission.title)
-            await client.send_message(client.get_channel(message.channel.id), submission.selftext)
+            await message.channel.send( "Yo guys, I got an idea!")
+            await message.channel.send( submission.title)
+            await message.channel.send( submission.selftext)
 
     elif(random.randint(1,10) == 5):
         if(message.author != "DrunkBot"):    
             log("Message will be replied to")
-            await client.send_message(client.get_channel(message.channel.id), getRandomRespose() + ", " + message.author.mention)
+            await message.channel.send( getRandomRespose() + ", " + message.author.mention)
     else:
         pass
 
